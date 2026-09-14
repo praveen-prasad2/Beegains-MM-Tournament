@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0b0d17;
+  --surface: #12162a;
+  --surface-2: #191f38;
+  --border: #262c4a;
+  --foreground: #f1f3fb;
+  --muted: #9aa1c2;
+  --accent: #ffb020;
+  --accent-2: #7c9bff;
+  --success: #34d399;
+  --danger: #fb7185;
+
+  --team-red: #ef4444;
+  --team-blue: #3b82f6;
+  --team-green: #22c55e;
+  --team-yellow: #eab308;
+  --team-purple: #a855f7;
+  --team-orange: #f97316;
+  --team-black: #6b7280;
+  --team-brown: #a1683a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-poppins);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(124, 155, 255, 0.12), transparent),
+    radial-gradient(1000px 500px at 100% 0%, rgba(255, 176, 32, 0.08), transparent),
+    var(--background);
+  color: var(--foreground);
+  min-height: 100dvh;
+}
+
+::selection {
+  background: var(--accent);
+  color: #16181f;
+}
+
+/* Thin, styled scrollbars for horizontally-scrolling tables on mobile */
+.scroll-thin::-webkit-scrollbar {
+  height: 6px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}

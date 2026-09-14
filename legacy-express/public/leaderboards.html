@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leaderboards — Mini Militia Season 2</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-page="leaderboards">
+<header class="app-header">
+  <div class="title-row">
+    <h1>Mini Militia — Season 2<small>Kills &amp; Deaths Leaderboards</small></h1>
+  </div>
+  <nav class="tabs">
+    <a href="index.html" data-page="points">Points Table</a>
+    <a href="schedule.html" data-page="schedule">Schedule &amp; Results</a>
+    <a href="leaderboards.html" data-page="leaderboards">Leaderboards</a>
+    <a href="finals.html" data-page="finals">Finals</a>
+    <a href="admin/login.html" data-page="admin">Admin</a>
+  </nav>
+</header>
+<main>
+  <div class="row" style="margin-bottom:12px">
+    <label style="margin:0" for="stage-select" class="muted">Stage:</label>
+    <select id="stage-select" style="width:auto">
+      <option value="league">League</option>
+      <option value="finals">Finals</option>
+      <option value="all">All</option>
+    </select>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>🎯 Most Kills — Teams</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>#</th><th>Team</th><th>Kills</th></tr></thead>
+        <tbody id="kills-team-body"><tr><td colspan="3" class="muted">Loading…</td></tr></tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h2>🎯 Most Kills — Players</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>#</th><th>Player</th><th>Team</th><th>Kills</th></tr></thead>
+        <tbody id="kills-player-body"><tr><td colspan="4" class="muted">Loading…</td></tr></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>💀 Most Deaths — Teams</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>#</th><th>Team</th><th>Deaths</th></tr></thead>
+        <tbody id="deaths-team-body"><tr><td colspan="3" class="muted">Loading…</td></tr></tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h2>💀 Most Deaths — Players</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>#</th><th>Player</th><th>Team</th><th>Deaths</th></tr></thead>
+        <tbody id="deaths-player-body"><tr><td colspan="4" class="muted">Loading…</td></tr></tbody>
+      </table></div>
+    </div>
+  </div>
+</main>
+<script src="js/common.js"></script>
+<script src="js/leaderboards.js"></script>
+</body>
+</html>

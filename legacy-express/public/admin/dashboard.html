@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Admin — Mini Militia Season 2</title>
+<link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body data-page="admin">
+<header class="app-header">
+  <div class="title-row">
+    <h1>Mini Militia — Season 2<small>Admin Panel</small></h1>
+    <button class="secondary" id="logout-btn" style="padding:6px 12px;font-size:12px">Log out</button>
+  </div>
+  <nav class="tabs">
+    <a href="../index.html">Points Table</a>
+    <a href="../schedule.html">Schedule &amp; Results</a>
+    <a href="../leaderboards.html">Leaderboards</a>
+    <a href="../finals.html">Finals</a>
+  </nav>
+</header>
+<main>
+  <nav class="tabs" id="admin-tabs" style="margin-bottom:14px">
+    <a href="#" data-tab="entry" class="active">Enter Result</a>
+    <a href="#" data-tab="schedule-edit">Edit Schedule</a>
+    <a href="#" data-tab="league">League &amp; Finals</a>
+    <a href="#" data-tab="danger">Danger Zone</a>
+  </nav>
+
+  <!-- ===== Match Result Entry ===== -->
+  <section id="tab-entry">
+    <div class="card">
+      <h2>Enter / Edit Match Result</h2>
+      <label for="match-select">Match</label>
+      <select id="match-select"></select>
+
+      <div id="entry-form-wrap"></div>
+    </div>
+  </section>
+
+  <!-- ===== Schedule Editor ===== -->
+  <section id="tab-schedule-edit" style="display:none">
+    <div class="card">
+      <h2>League Schedule</h2>
+      <p class="muted">Edit the day, match slot, competing teams, date or notes for any league match. Useful for reschedules.</p>
+      <div id="schedule-editor-list"><p class="muted">Loading…</p></div>
+    </div>
+  </section>
+
+  <!-- ===== League & Finals controls ===== -->
+  <section id="tab-league" style="display:none">
+    <div class="card">
+      <h2>League Stage</h2>
+      <p id="league-status" class="muted">Checking status…</p>
+      <div class="row">
+        <button id="complete-league-btn">Mark League Complete</button>
+        <button id="reopen-league-btn" class="secondary">Reopen League Stage</button>
+      </div>
+      <div id="league-msg" class="status-msg"></div>
+    </div>
+
+    <div class="card">
+      <h2>Finals</h2>
+      <div id="qualified-teams" class="muted">—</div>
+      <div class="row" style="margin-top:10px">
+        <button id="add-finals-match-btn">+ Add Finals Match</button>
+      </div>
+      <div id="finals-msg" class="status-msg"></div>
+      <hr class="divider" />
+      <div id="finals-list"></div>
+    </div>
+  </section>
+
+  <!-- ===== Danger Zone ===== -->
+  <section id="tab-danger" style="display:none">
+    <div class="card">
+      <h2 style="color:var(--danger)">Reset Tournament Data</h2>
+      <p class="muted">This wipes all results and regenerates a fresh league schedule. This cannot be undone.</p>
+      <label for="reset-confirm">Type RESET to confirm</label>
+      <input type="text" id="reset-confirm" placeholder="RESET" />
+      <div class="row" style="margin-top:10px">
+        <button class="danger" id="reset-btn">Reset Everything</button>
+      </div>
+      <div id="reset-msg" class="status-msg"></div>
+    </div>
+  </section>
+</main>
+<script src="../js/common.js"></script>
+<script src="../js/admin-dashboard.js"></script>
+</body>
+</html>

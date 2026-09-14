@@ -1,0 +1,14 @@
+{
+  "name": "mini-militia-season2",
+  "version": "1.0.0",
+  "description": "Tournament manager for Mini Militia Season 2",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "express-session": "^1.18.0"
+  }
+}

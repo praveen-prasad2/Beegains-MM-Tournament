@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Schedule &amp; Results — Mini Militia Season 2</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-page="schedule">
+<header class="app-header">
+  <div class="title-row">
+    <h1>Mini Militia — Season 2<small>Match Schedule &amp; Results</small></h1>
+  </div>
+  <nav class="tabs">
+    <a href="index.html" data-page="points">Points Table</a>
+    <a href="schedule.html" data-page="schedule">Schedule &amp; Results</a>
+    <a href="leaderboards.html" data-page="leaderboards">Leaderboards</a>
+    <a href="finals.html" data-page="finals">Finals</a>
+    <a href="admin/login.html" data-page="admin">Admin</a>
+  </nav>
+</header>
+<main>
+  <div class="card">
+    <h2>League Stage — 16 Matches / 8 Days</h2>
+    <div id="league-matches"><p class="muted">Loading…</p></div>
+  </div>
+  <div class="card" id="finals-section" style="display:none">
+    <h2>Finals</h2>
+    <div id="finals-matches"></div>
+  </div>
+</main>
+<footer class="hint">Upcoming matches are shown in grey; completed matches show final placements, kills and points.</footer>
+<script src="js/common.js"></script>
+<script src="js/schedule.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Admin Login — Mini Militia Season 2</title>
+<link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body data-page="admin">
+<header class="app-header">
+  <div class="title-row">
+    <h1>Mini Militia — Season 2<small>Admin Login</small></h1>
+  </div>
+  <nav class="tabs">
+    <a href="../index.html">Points Table</a>
+    <a href="../schedule.html">Schedule &amp; Results</a>
+    <a href="../leaderboards.html">Leaderboards</a>
+    <a href="../finals.html">Finals</a>
+    <a href="login.html" class="active">Admin</a>
+  </nav>
+</header>
+<main style="max-width:400px">
+  <div class="card">
+    <h2>Admin Login</h2>
+    <form id="login-form">
+      <label for="username">Username</label>
+      <input type="text" id="username" autocomplete="username" required />
+      <label for="password">Password</label>
+      <input type="password" id="password" autocomplete="current-password" required />
+      <div class="row" style="margin-top:14px">
+        <button type="submit">Log in</button>
+      </div>
+      <div id="msg" class="status-msg"></div>
+    </form>
+  </div>
+</main>
+<script src="../js/common.js"></script>
+<script src="../js/admin-login.js"></script>
+</body>
+</html>
