@@ -1,8 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Crosshair, Skull as SkullIcon } from 'lucide-react';
 import { apiFetch } from '@/lib/api-client';
 import TeamBadge from '@/components/TeamBadge';
+import { RANK_GRADIENT } from '@/lib/rank';
 import type { PlayerDeathsRow, PlayerKillsRow, TeamDeathsRow, TeamKillsRow } from '@/lib/types';
 
 type Stage = 'league' | 'finals' | 'all';
@@ -41,10 +43,18 @@ function RankTable<T extends { teamName: string; color: TeamKillsRow['color']; p
         <tbody>
           {rows.map((row, i) => (
             <tr key={i}>
-              <td className="border-b border-border py-2 pr-3">{i + 1}</td>
+              <td className="border-b border-border py-2 pr-3">
+                <span
+                  className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${
+                    RANK_GRADIENT[i + 1] ?? 'text-muted'
+                  }`}
+                >
+                  {i + 1}
+                </span>
+              </td>
               {row.playerName !== undefined && <td className="border-b border-border py-2 pr-3">{row.playerName}</td>}
               <td className="border-b border-border py-2 pr-3">
-                <TeamBadge name={row.teamName} color={row.color} size="sm" />
+                <TeamBadge name={row.teamName} color={row.color} size="sm" variant="logo" />
               </td>
               <td className="border-b border-border py-2 pr-3 font-semibold">{(row as unknown as Record<string, number>)[valueKey]}</td>
             </tr>
@@ -107,19 +117,31 @@ export default function LeaderboardsPage() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <section className="rounded-2xl border border-border bg-surface p-4">
-          <h2 className="mb-3 text-[15px] font-semibold">Most Kills — Teams</h2>
+          <h2 className="mb-3 flex items-center gap-2 text-[15px] font-semibold">
+            <Crosshair size={16} className="text-accent-2" strokeWidth={2} />
+            Most Kills — Teams
+          </h2>
           {kills ? <RankTable rows={kills.byTeam} valueKey="kills" valueLabel="Kills" /> : <p className="text-sm text-muted">Loading…</p>}
         </section>
         <section className="rounded-2xl border border-border bg-surface p-4">
-          <h2 className="mb-3 text-[15px] font-semibold">Most Kills — Players</h2>
+          <h2 className="mb-3 flex items-center gap-2 text-[15px] font-semibold">
+            <Crosshair size={16} className="text-accent-2" strokeWidth={2} />
+            Most Kills — Players
+          </h2>
           {kills ? <RankTable rows={kills.byPlayer} valueKey="kills" valueLabel="Kills" /> : <p className="text-sm text-muted">Loading…</p>}
         </section>
         <section className="rounded-2xl border border-border bg-surface p-4">
-          <h2 className="mb-3 text-[15px] font-semibold">Most Deaths — Teams</h2>
+          <h2 className="mb-3 flex items-center gap-2 text-[15px] font-semibold">
+            <SkullIcon size={16} className="text-danger" strokeWidth={2} />
+            Most Deaths — Teams
+          </h2>
           {deaths ? <RankTable rows={deaths.byTeam} valueKey="deaths" valueLabel="Deaths" /> : <p className="text-sm text-muted">Loading…</p>}
         </section>
         <section className="rounded-2xl border border-border bg-surface p-4">
-          <h2 className="mb-3 text-[15px] font-semibold">Most Deaths — Players</h2>
+          <h2 className="mb-3 flex items-center gap-2 text-[15px] font-semibold">
+            <SkullIcon size={16} className="text-danger" strokeWidth={2} />
+            Most Deaths — Players
+          </h2>
           {deaths ? <RankTable rows={deaths.byPlayer} valueKey="deaths" valueLabel="Deaths" /> : <p className="text-sm text-muted">Loading…</p>}
         </section>
       </div>

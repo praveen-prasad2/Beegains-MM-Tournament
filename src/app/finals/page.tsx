@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Trophy } from 'lucide-react';
 import { apiFetch, ordinal } from '@/lib/api-client';
-import TeamBadge from '@/components/TeamBadge';
+import TeamLogo from '@/components/TeamLogo';
 import MatchCard from '@/components/MatchCard';
+import { RANK_GRADIENT } from '@/lib/rank';
 import type { LeagueState, SerializedMatch, Team } from '@/lib/types';
 
 export default function FinalsPage() {
@@ -43,6 +45,7 @@ export default function FinalsPage() {
   if (!league.complete) {
     return (
       <section className="rounded-2xl border border-border bg-surface p-5 text-center">
+        <Trophy className="mx-auto mb-3 text-muted" size={28} strokeWidth={1.75} />
         <h2 className="mb-2 text-[15px] font-semibold">Finals not started yet</h2>
         <p className="text-[13px] text-muted">
           The Finals will appear here once the league stage is complete and the top 3 teams have been determined.
@@ -56,12 +59,21 @@ export default function FinalsPage() {
   return (
     <div className="space-y-4">
       <section className="rounded-2xl border border-border bg-surface p-4 sm:p-5">
-        <h2 className="mb-3 text-[15px] font-semibold">🏆 Qualified Teams</h2>
-        <div className="space-y-2">
+        <h2 className="mb-4 flex items-center gap-2 text-[15px] font-semibold">
+          <Trophy size={17} className="text-accent" strokeWidth={2} />
+          Qualified Teams
+        </h2>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           {qualified.map((t, i) => (
-            <div key={t.id} className="flex items-center justify-between">
-              <TeamBadge name={t.name} color={t.color} size="lg" />
-              <span className="text-[12px] text-muted">Qualified {ordinal(i + 1)}</span>
+            <div
+              key={t.id}
+              className="flex flex-col items-center gap-2.5 rounded-xl border border-border bg-surface-2 px-4 py-5 text-center"
+            >
+              <TeamLogo name={t.name} color={t.color} size="xl" />
+              <span className="text-sm font-semibold">{t.name}</span>
+              <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${RANK_GRADIENT[i + 1]}`}>
+                {ordinal(i + 1)} Place
+              </span>
             </div>
           ))}
         </div>

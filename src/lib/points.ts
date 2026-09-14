@@ -20,6 +20,7 @@ export function computeMatchPoints(teamKills: number, placement: number): number
 
 export function buildPointsTable(state: TournamentState): PointsTableRow[] {
   const rows = new Map<number, PointsTableRow>();
+  const teamByPlayer = new Map<number, number>();
   for (const team of state.teams) {
     rows.set(team.id, {
       teamId: team.id,
@@ -30,9 +31,11 @@ export function buildPointsTable(state: TournamentState): PointsTableRow[] {
       seconds: 0,
       thirds: 0,
       totalKills: 0,
+      totalDeaths: 0,
       totalPoints: 0,
       rank: 0,
     });
+    for (const p of team.players) teamByPlayer.set(p.id, team.id);
   }
 
   for (const match of state.matches) {
@@ -47,11 +50,17 @@ export function buildPointsTable(state: TournamentState): PointsTableRow[] {
       row.totalKills += mt.kills;
       row.totalPoints += mt.points;
     }
+    for (const ps of match.players) {
+      const teamId = teamByPlayer.get(ps.playerId);
+      const row = teamId !== undefined ? rows.get(teamId) : undefined;
+      if (row) row.totalDeaths += ps.deaths;
+    }
   }
 
+  // Rank by total points; ties are broken by fewest deaths (not kills).
   const sorted = [...rows.values()].sort((a, b) => {
     if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
-    if (b.totalKills !== a.totalKills) return b.totalKills - a.totalKills;
+    if (a.totalDeaths !== b.totalDeaths) return a.totalDeaths - b.totalDeaths;
     return a.teamName.localeCompare(b.teamName);
   });
   sorted.forEach((row, idx) => {

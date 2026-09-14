@@ -20,6 +20,16 @@
   --team-orange: #f97316;
   --team-black: #6b7280;
   --team-brown: #a1683a;
+
+  /* Deeper shade of each team color, used as the far end of the logo gradient */
+  --team-red-deep: #9f1d1d;
+  --team-blue-deep: #1d4ed8;
+  --team-green-deep: #15803d;
+  --team-yellow-deep: #a16207;
+  --team-purple-deep: #7e22ce;
+  --team-orange-deep: #c2410c;
+  --team-black-deep: #374151;
+  --team-brown-deep: #6b4226;
 }
 
 @theme inline {

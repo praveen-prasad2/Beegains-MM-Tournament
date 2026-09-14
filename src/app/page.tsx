@@ -1,15 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Trophy } from 'lucide-react';
 import { apiFetch } from '@/lib/api-client';
 import TeamBadge from '@/components/TeamBadge';
+import { RANK_GRADIENT } from '@/lib/rank';
 import type { LeagueState, PointsTableRow } from '@/lib/types';
-
-const RANK_STYLES: Record<number, string> = {
-  1: 'bg-gradient-to-br from-[#ffd76a] to-[#b8860b] text-[#3a2a00]',
-  2: 'bg-gradient-to-br from-[#e2e8f0] to-[#94a3b8] text-[#1f2937]',
-  3: 'bg-gradient-to-br from-[#f0b27a] to-[#a15c2a] text-[#3a1f00]',
-};
 
 export default function PointsTablePage() {
   const [table, setTable] = useState<PointsTableRow[] | null>(null);
@@ -39,12 +35,15 @@ export default function PointsTablePage() {
   return (
     <div className="space-y-4">
       {league?.complete && table && (
-        <div className="rounded-xl border border-dashed border-success/50 bg-success/10 px-4 py-3 text-[13px] text-success">
-          🏆 League stage complete — Finals Zone qualifiers:{' '}
-          {table
-            .filter((r) => league.qualifiedTeamIds.includes(r.teamId))
-            .map((r) => r.teamName)
-            .join(', ')}
+        <div className="flex items-start gap-2.5 rounded-xl border border-dashed border-success/50 bg-success/10 px-4 py-3 text-[13px] text-success">
+          <Trophy size={16} className="mt-0.5 shrink-0" strokeWidth={2} />
+          <span>
+            League stage complete — Finals Zone qualifiers:{' '}
+            {table
+              .filter((r) => league.qualifiedTeamIds.includes(r.teamId))
+              .map((r) => r.teamName)
+              .join(', ')}
+          </span>
         </div>
       )}
 
@@ -53,7 +52,7 @@ export default function PointsTablePage() {
           <h2 className="text-[15px] font-semibold">League Points Table</h2>
         </div>
         <p className="mb-4 text-[13px] text-muted">
-          Top 3 teams qualify for the Finals once the league stage is marked complete.
+          Top 3 teams qualify for the Finals once the league stage is marked complete. Ties on points are broken by fewest deaths.
         </p>
 
         {error && <p className="text-sm text-danger">{error}</p>}
@@ -67,7 +66,7 @@ export default function PointsTablePage() {
         {!error && table && started && (
           <div className="relative -mx-4 sm:mx-0">
           <div className="overflow-x-auto scroll-thin px-4 sm:px-0">
-            <table className="w-full min-w-140 border-collapse text-[13px]">
+            <table className="w-full min-w-160 border-collapse text-[13px]">
               <thead>
                 <tr className="text-left text-[11px] uppercase tracking-wide text-muted">
                   <th className="border-b border-border py-2 pr-3">#</th>
@@ -77,6 +76,7 @@ export default function PointsTablePage() {
                   <th className="border-b border-border py-2 pr-3">2nd</th>
                   <th className="border-b border-border py-2 pr-3">3rd</th>
                   <th className="border-b border-border py-2 pr-3">Kills</th>
+                  <th className="border-b border-border py-2 pr-3">Deaths</th>
                   <th className="border-b border-border py-2 pr-3">Points</th>
                 </tr>
               </thead>
@@ -91,20 +91,21 @@ export default function PointsTablePage() {
                       <td className="border-b border-border py-2.5 pr-3">
                         <span
                           className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold ${
-                            RANK_STYLES[row.rank] ?? 'bg-surface-2 text-muted'
+                            RANK_GRADIENT[row.rank] ?? 'bg-surface-2 text-muted'
                           }`}
                         >
                           {row.rank}
                         </span>
                       </td>
                       <td className="border-b border-border py-2.5 pr-3">
-                        <TeamBadge name={row.teamName} color={row.color} />
+                        <TeamBadge name={row.teamName} color={row.color} variant="logo" />
                       </td>
                       <td className="border-b border-border py-2.5 pr-3">{row.matchesPlayed}</td>
                       <td className="border-b border-border py-2.5 pr-3">{row.firsts}</td>
                       <td className="border-b border-border py-2.5 pr-3">{row.seconds}</td>
                       <td className="border-b border-border py-2.5 pr-3">{row.thirds}</td>
                       <td className="border-b border-border py-2.5 pr-3">{row.totalKills}</td>
+                      <td className="border-b border-border py-2.5 pr-3">{row.totalDeaths}</td>
                       <td className="border-b border-border py-2.5 pr-3 font-semibold text-foreground">{row.totalPoints}</td>
                     </tr>
                   );

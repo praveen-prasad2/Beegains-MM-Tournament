@@ -72,6 +72,7 @@ export interface PointsTableRow {
   seconds: number;
   thirds: number;
   totalKills: number;
+  totalDeaths: number;
   totalPoints: number;
   rank: number;
 }

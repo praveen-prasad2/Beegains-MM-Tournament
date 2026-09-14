@@ -1,5 +1,6 @@
 import TeamBadge from './TeamBadge';
 import { ordinal } from '@/lib/api-client';
+import { RANK_GRADIENT } from '@/lib/rank';
 import type { SerializedMatch } from '@/lib/types';
 
 export default function MatchCard({ match }: { match: SerializedMatch }) {
@@ -32,7 +33,16 @@ export default function MatchCard({ match }: { match: SerializedMatch }) {
         <div className="space-y-1.5">
           {teams.map((t) => (
             <div key={t.teamId} className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-              <TeamBadge name={t.teamName} color={t.color ?? 'Black'} />
+              <span className="flex items-center gap-2">
+                <span
+                  className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${
+                    RANK_GRADIENT[t.placement ?? 0] ?? 'bg-surface text-muted'
+                  }`}
+                >
+                  {t.placement}
+                </span>
+                <TeamBadge name={t.teamName} color={t.color ?? 'Black'} variant="logo" />
+              </span>
               <span className="text-[12px] text-muted">
                 {ordinal(t.placement ?? 0)} · {t.kills} kills · {t.points} pts
               </span>
@@ -44,7 +54,7 @@ export default function MatchCard({ match }: { match: SerializedMatch }) {
           {teams.map((t, i) => (
             <span key={t.teamId} className="flex items-center gap-2">
               {i > 0 && <span className="text-[11px] text-muted">vs</span>}
-              <TeamBadge name={t.teamName} color={t.color ?? 'Black'} />
+              <TeamBadge name={t.teamName} color={t.color ?? 'Black'} variant="logo" />
             </span>
           ))}
         </div>

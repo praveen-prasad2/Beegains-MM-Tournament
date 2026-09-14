@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Swords } from 'lucide-react';
 
 const LINKS = [
   { href: '/', label: 'Points Table', subtitle: 'League Points Table' },
@@ -19,10 +20,15 @@ export default function Nav() {
   return (
     <header className="sticky top-0 z-20 border-b border-border bg-surface/90 backdrop-blur supports-[backdrop-filter]:bg-surface/70">
       <div className="mx-auto max-w-3xl px-4 pt-3 pb-2">
-        <div className="flex items-baseline justify-between gap-3">
-          <h1 className="text-base font-semibold tracking-tight">
-            Mini Militia{' '}
-            <span className="bg-linear-to-r from-accent to-accent-2 bg-clip-text text-transparent">Season 2</span>
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="flex items-center gap-2 text-base font-semibold tracking-tight">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-accent to-accent-2">
+              <Swords size={15} strokeWidth={2.5} className="text-[#16181f]" />
+            </span>
+            <span>
+              Mini Militia{' '}
+              <span className="bg-linear-to-r from-accent to-accent-2 bg-clip-text text-transparent">Season 2</span>
+            </span>
           </h1>
           <span className="text-xs text-muted whitespace-nowrap">{subtitle}</span>
         </div>

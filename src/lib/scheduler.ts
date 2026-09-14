@@ -3,13 +3,25 @@
 // Rules:
 //  - 8 teams, 6 matches each, 3 teams per match, 2 matches per day, 8 days.
 //  - No team plays twice in one day.
-//  - Rest days spread evenly: with 8 teams resting 2-per-day over 8 days,
-//    every team rests exactly 2 days (16 rest-slots / 8 teams = 2 each).
-//    This is achieved by resting adjacent pairs of a fixed 8-cycle of teams,
-//    which is a 2-regular graph on 8 vertices (every team touches exactly
-//    two rest-pairs).
+//  - Rest days spread evenly: every team rests exactly 2 of the 8 days
+//    (16 rest-slots / 8 teams = 2 each).
+//  - A team that rests on a given day always plays the very next day — i.e.
+//    no team gets two consecutive rest days.
 //  - Match trios are chosen via backtracking search to avoid repeating the
 //    exact same trio of teams across the 16 matches whenever possible.
+//  - Day 1 can optionally be pinned to specific matches (e.g. a fixture the
+//    organizers already announced); the rest of the schedule is generated
+//    around that fixed day.
+
+function combinationsOfTwo(arr: number[]): [number, number][] {
+  const out: [number, number][] = [];
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      out.push([arr[i], arr[j]]);
+    }
+  }
+  return out;
+}
 
 function combinationsOfThree(arr: number[]): number[][] {
   const out: number[][] = [];
@@ -68,17 +80,60 @@ export interface ScheduledMatch {
   teams: number[];
 }
 
-export function generateLeagueSchedule(teamIds: number[], seed = 42): ScheduledMatch[] {
+export interface ForcedDay1 {
+  restPair: [number, number];
+  trios: [number[], number[]];
+}
+
+// Find a sequence of 8 rest-pairs (one per day) where every team rests
+// exactly twice and never on two consecutive days. Day 1 may be pinned.
+function findRestPairs(teamIds: number[], rng: () => number, forcedPair?: [number, number]): number[][] {
+  const days = 8;
+  const restCount = new Map<number, number>(teamIds.map((t) => [t, 0]));
+  const lastRestDay = new Map<number, number>(teamIds.map((t) => [t, 0]));
+  const pairs: (number[] | null)[] = new Array(days).fill(null);
+
+  function backtrack(day: number): boolean {
+    if (day > days) {
+      return teamIds.every((t) => restCount.get(t) === 2);
+    }
+
+    const eligible = teamIds.filter((t) => (restCount.get(t) || 0) < 2 && lastRestDay.get(t) !== day - 1);
+    const candidates =
+      day === 1 && forcedPair
+        ? [forcedPair]
+        : shuffle(combinationsOfTwo(eligible), rng);
+
+    for (const [a, b] of candidates) {
+      restCount.set(a, (restCount.get(a) || 0) + 1);
+      restCount.set(b, (restCount.get(b) || 0) + 1);
+      lastRestDay.set(a, day);
+      lastRestDay.set(b, day);
+      pairs[day - 1] = [a, b];
+
+      if (backtrack(day + 1)) return true;
+
+      restCount.set(a, (restCount.get(a) || 0) - 1);
+      restCount.set(b, (restCount.get(b) || 0) - 1);
+      pairs[day - 1] = null;
+    }
+    return false;
+  }
+
+  if (!backtrack(1)) {
+    throw new Error('Failed to generate a valid rest-day rotation');
+  }
+  return pairs as number[][];
+}
+
+export function generateLeagueSchedule(teamIds: number[], seed = 42, forcedDay1?: ForcedDay1): ScheduledMatch[] {
   if (teamIds.length !== 8) {
     throw new Error('League scheduler requires exactly 8 teams');
   }
   const rng = mulberry32(seed);
   const days = 8;
 
-  const restPairs: number[][] = [];
-  for (let d = 0; d < days; d++) {
-    restPairs.push([teamIds[d], teamIds[(d + 1) % 8]]);
-  }
+  const restPairs = findRestPairs(teamIds, rng, forcedDay1?.restPair);
 
   const usedTrios = new Set<string>();
   const result: ({ matchNumber: number; teams: number[] }[] | null)[] = new Array(days).fill(null);
@@ -87,6 +142,20 @@ export function generateLeagueSchedule(teamIds: number[], seed = 42): ScheduledM
     if (day === days) return true;
     const resting = new Set(restPairs[day]);
     const playing = teamIds.filter((t) => !resting.has(t));
+
+    if (day === 0 && forcedDay1) {
+      const [a, b] = forcedDay1.trios;
+      result[day] = [
+        { matchNumber: 1, teams: a },
+        { matchNumber: 2, teams: b },
+      ];
+      usedTrios.add(trioSig(a));
+      usedTrios.add(trioSig(b));
+      if (backtrack(day + 1)) return true;
+      result[day] = null;
+      return false;
+    }
+
     const splits = shuffle(allSplitsOfSix(playing), rng);
 
     const scored = splits

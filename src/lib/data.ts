@@ -1,5 +1,5 @@
 import { getDb } from './mongodb';
-import { generateLeagueSchedule } from './scheduler';
+import { generateLeagueSchedule, type ForcedDay1 } from './scheduler';
 import type { Match, Team, TournamentState } from './types';
 
 const COLLECTION = 'tournamentState';
@@ -16,9 +16,21 @@ export const SEED_TEAMS: Team[] = [
   { id: 8, name: '2 Kings', color: 'Brown', players: [{ id: 15, name: 'Jyodish' }, { id: 16, name: 'Ajmal' }] },
 ];
 
+// Day 1 fixtures are pinned to what was already announced:
+//   Match 1: Eldo x Rado vs Fight Club vs Deadly Duo
+//   Match 2: Double Barrel vs Nexus Avengers vs 2 Kings
+//   Resting: Death Dealers, Doodle Army
+const DAY1_FIXED: ForcedDay1 = {
+  restPair: [3, 4],
+  trios: [
+    [1, 2, 6],
+    [5, 7, 8],
+  ],
+};
+
 function buildInitialState(): TournamentState {
   const teamIds = SEED_TEAMS.map((t) => t.id);
-  const schedule = generateLeagueSchedule(teamIds);
+  const schedule = generateLeagueSchedule(teamIds, 42, DAY1_FIXED);
   let matchId = 1;
   const matches: Match[] = schedule.map((m) => ({
     id: matchId++,
